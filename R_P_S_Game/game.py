@@ -1,15 +1,50 @@
 import random
 import json
-rck = '##########\n##########\n##########\n##########\n##########'
+rck = '''
+##########
+##########
+##########
+##########
+##########
+'''
+pap = '''
+##########
+|        |
+|        |
+|        |
+##########
+'''
+sci = '''
+\     /
+ \   /  
+   X    
+  / \ 
+[]   []
+'''
+vs1 = '''
+# #################### #
+# \       / ========   #
+#  \     /  |          #  
+#   \   /   |======|   #
+#    \ /           |   #
+#     v     =======|   #
+# #################### #
+'''
 
-pap = '##########\n|        |\n|        |\n|        |\n##########'
-     
-sci = '\       /\n\   /  \n  X    \n/    \\n[]      []\n'
+vs = [
+'      \       / ========        ',
+'       \     /  |               ', 
+'        \   /   |======|        ',
+'         \ /           |        ',
+'          v     =======|        ',
+]
+
+
 
 scores = {
     'Wins': 0,
     'Loses': 0,
-    'Ties': 0
+    'Ties': 0,
 }
 
 
@@ -17,49 +52,81 @@ choices = {
  'R':{
     'id':'R',
     'Win':'Scissors',
-    'Lose':'Paper'
+    'Lose':'Paper',
+    'art': [
+        '##########',
+        '##########',
+        '##########',
+        '##########',
+        '##########',
+    ]
 },
 'P':{
     'id':'P',
     'Win':'Rock',
-    'Lose':'Scissors'
+    'Lose':'Scissors',
+    'art': [
+    '##########',
+    '|        |',
+    '|        |',
+    '|        |',
+    '##########',
+    ]
 },
 'S':{
     'id':'S',
     'Win':'Paper',
-    'Lose':'Rock'
+    'Lose':'Rock',
+    'art': [
+    '\     /',
+    ' \   / ', 
+    '   X   ', 
+    '  / \  ',
+    '[]   []',
+    ]
 },
 }
 
 loop = True
 while loop:
     pick = input('Pick R,P,S : ')
-    opt = ['R','P','S']
+    print('############')
     pick = pick.upper();
+    opt = ['R','P','S']
+    lines = [];
     if pick in opt:
         ran2 = random.randrange(0,3)
         p1 = choices[pick]
         p2 = choices[opt[ran2]]
+        for i in range(5):
+            line = str(p1['art'][i] + vs[i] + p2['art'][i] + '\n')
+            lines.append(line)
+            
         #You WIN
         if (p1['Win'] == p2['Lose']):
+            print('YOU WIN')
             print('############')
-            print('YOU WON')
             scores['Wins'] = scores['Wins'] + 1
         #You LOSE
         elif (p1['Lose'] == p2['Win']):
-            print('############')
             print('YOU LOSE')
+            print('############')
             scores['Loses'] = scores['Loses'] + 1
         #You DRAW
         elif (p1['id'] == p2['id']):
+            print('YOU TIE')
             print('############')
-            print('YOU DRAW')
             scores['Ties'] = scores['Ties'] + 1
-        print('############')
+        print('\n')
+        text = ''
+        for line in lines:
+            text = text + str(line)
+        print(text)
         out = input('AGAIN Y/N : ')
         print('############')
         if out.upper() == 'N':
             loop = False
+            
 
 print(scores)
 fileR = open('scores.json','r',encoding='utf-8')
